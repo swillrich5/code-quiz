@@ -8,12 +8,14 @@ var answer3Button = document.querySelector("#answer3-button");
 var answer4Button = document.querySelector("#answer4-button");
 var answerResult = document.querySelector("#answer-result");
 var gameTimerTag = document.querySelector("#game-timer");
+var gameOverTag = document.querySelector("#game-over-tag");
 
 
 var chosenQuestion;
 var resultTimer = 1;
 var gameTimer = 30;
 var score = 0;
+var gameOverFlag = false;
 
 // this is the array of questions/answer objects to be asked of the user
 var quizArray = [
@@ -32,7 +34,6 @@ var quizArray = [
         answer3: "3. parentheses",
         answer4: "4. square backets",
         correctAnswer: "3. parentheses"
-
     },
     {
         question: "Arrays in JavaScript can be used to store _____.",
@@ -61,6 +62,19 @@ var quizArray = [
     }
 ];
 
+// clear out every tag on the screen except for those related to 
+// "View Highscore" and the timer.
+function clearScreen() {
+
+    questionText.textContent = "";
+    answer1Button.style.display = "none";
+    answer2Button.style.display = "none";
+    answer3Button.style.display = "none";
+    answer4Button.style.display = "none";
+    gameOverTag.textContent = "";
+
+}
+
 // this function runs when the site first loads
 // after this the code is waiting for the user to press "Start Quiz"
 function loadGame() {
@@ -79,16 +93,76 @@ function loadGame() {
     answer4Button.style.display = "none";
 }
 
+function enterInitials() {
+
+    questionText.textContent = "All Done!!!";
+    answerText.style.display = "block";
+    answerText.textContent = "Your final score is: " + score;
+    var labelTag = document.createElement("label");
+    labelTag.style.fontSize = "20px";
+    labelTag.textContent= "Enter initials: ";
+    labelTag.style.marginTop = "20px";
+    answersContainer.appendChild(labelTag);
+    // labelTag.setAttribute("id", "label-tag");
+    var initialsTag = document.createElement("input");
+    initialsTag.setAttribute.type = "text";
+    initialsTag.style.fontSize = "20px";
+    initialsTag.style.marginTop = "20px";
+    initialsTag.textContent= "";
+    answersContainer.appendChild(initialsTag);
+    initialsTag.setAttribute("id", "initials-tag");
+
+    var newGameTag = document.createElement("button");
+    newGameTag.textContent= "New Game";
+    answersContainer.appendChild(newGameTag);
+    newGameTag.setAttribute("id", "new-game-button");
+    
+    var showHighscoresTag = document.createElement("button");
+    showHighscoresTag.textContent= "Show High Scores";
+    answersContainer.appendChild(showHighscoresTag);
+    showHighscoresTag.setAttribute("id", "show-highscores-button");
+
+
+
+ 
+
+}
+
+
+// when the game is complete, go to game over screen to see your score and
+// enter your initials for the scoreboard.
+function gameOver() {
+    var displayGameOverTimer = 3;
+    gameOverFlag = true;
+  
+    gameTimer = 0;
+    gameTimerTag.textContent = "Time: 0";
+    gameOverTag.textContent = "⚡️  Game Over!  ⚡️";
+
+    var gameOverInterval = setInterval(function() {
+        displayGameOverTimer--;
+        if (displayGameOverTimer === 0) {
+            clearInterval(gameOverInterval);
+            displayGameOverTimer = 3;
+            clearScreen();
+            enterInitials();
+        }
+        
+    }, 1000);
+
+}
+
+
 
 // displays "Correct!" or "Wrong!" below the question for a short 
 // period of time
 function displayAnswerResult(right) {
 
     if (right) {
-        answerResult.textContent = "Correct!!! 😃"
+        answerResult.textContent = "Correct!!! 😃";
     }
     else {
-        answerResult.textContent = "Wrong! 😱"
+        answerResult.textContent = "Wrong! 😱";
     }
 
     var timerInterval = setInterval(function() {
@@ -109,24 +183,15 @@ function startGameTimer() {
         gameTimerTag.textContent = "Time: " + gameTimer;
         gameTimer--;
 
-
-        if (gameTimer === 0) {
+        if (gameTimer <= 0) {
             gameTimerTag.textContent = "Time: " + gameTimer;
             clearInterval(gameTimerInterval);
-            gameOver();
+            if (!gameOverFlag) {
+                gameOver();
+            }
+            gameTimer = 30;
         }
-
-
-
     }, 1000);
-}
-
-
-
-// when the game is complete, go to game over screen to see your score and
-// enter your initials for the scoreboard.
-function gameOver() {
-    console.log("Game Over!")
 }
 
 
@@ -136,7 +201,7 @@ function gameOver() {
 // event listeners
 function displayQuestions() {
     if (quizArray.length === 0) {
-        console.log("Game Over!");
+        console.log("⚡️  Game Over!  ⚡️");
         gameOver();
     } else {
         console.log(quizArray);
@@ -199,9 +264,11 @@ answer1Button.addEventListener("click", function() {
     if  (chosenQuestion.correctAnswer === chosenQuestion.answer1) {
         console.log("Correct");
         correctAnswer = true;
+        score = score + 20;
     } else {
         console.log("Wrong Answer");
         correctAnswer = false;
+        gameTimer = gameTimer - 10;  // lose 10 seconds for an incorrect answer
     }
     displayAnswerResult(correctAnswer);  // displays "Correct" or "Wrong" on screen
 });
@@ -213,9 +280,11 @@ answer2Button.addEventListener("click", function() {
     if  (chosenQuestion.correctAnswer === chosenQuestion.answer2) {
         console.log("Correct");
         correctAnswer = true;
+        score = score + 20;
     } else {
         console.log("Wrong Answer");
         correctAnswer = false;
+        gameTimer = gameTimer - 10;  // lose 10 seconds for an incorrect answer
     }
     displayAnswerResult(correctAnswer);  // displays "Correct" or "Wrong" on screen
 });
@@ -227,9 +296,11 @@ answer3Button.addEventListener("click", function() {
     if  (chosenQuestion.correctAnswer === chosenQuestion.answer3) {
         console.log("Correct");
         correctAnswer = true;
+        score = score + 20;
     } else {
         console.log("Wrong Answer");
         correctAnswer = false;
+        gameTimer = gameTimer - 10;  // lose 10 seconds for an incorrect answer
     }
     displayAnswerResult(correctAnswer);  // displays "Correct" or "Wrong" on screen
 });
@@ -241,9 +312,11 @@ answer4Button.addEventListener("click", function() {
     if  (chosenQuestion.correctAnswer === chosenQuestion.answer4) {
         console.log("Correct");
         correctAnswer = true;
+        score = score + 20;
     } else {
         console.log("Wrong Answer");
         correctAnswer = false;
+        gameTimer = gameTimer - 10;  // lose 10 seconds for an incorrect answer
     }
     displayAnswerResult(correctAnswer);  // displays "Correct" or "Wrong" on screen
 });
