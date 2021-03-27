@@ -1,0 +1,68 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+h2 {
+    font-size: 2.5rem;
+}
+
+h3 {
+    font-size: 2rem;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+h4 {
+    font-size: 1.5rem;
+}
+
+h5 {
+    font-size: 1.25rem;
+}
+
+P {
+    font-size: 1.25rem;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-bottom: 50px;
+    margin: 20px;
+    font-weight: bold;
+}
+
+header a {
+    text-decoration: none;
+}
+
+main {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button {
+    display: block;
+    text-align: center;
+    margin: 10px auto 10px auto;
+    border: 0;
+    padding: 5px 10px;
+    background: purple;
+    color: white;
+    font-size: 20px;
+    border-radius: 5px;
+}
+
+.answer-button {
+    width: 225px;
+    text-align: left;
+    margin: 10px 10px 10px 30px;
+}
+
