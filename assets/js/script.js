@@ -15,6 +15,7 @@ var initialsInput = document.querySelector("#initials-input");
 var initialsInputButton = document.querySelector("#initials-input-button");
 var showHighscoresButton = document.querySelector("#show-highscores-button");
     
+var playerHighscores = [];
 
 var chosenQuestion;
 var resultTimer = 1;
@@ -96,9 +97,23 @@ function clearScreen() {
 
 }
 
+function getHighscoresFromStorage() {
+    var storedHighscores = JSON.parse(localStorage.getItem("highscores"));
+
+    if (playerHighscores !== null) {
+        playerHighscores = storedHighscores;
+    }
+    
+    console.log("Player High Scores", playerHighscores);
+
+}
+
+
+
 // this function runs when the site first loads
 // after this the code is waiting for the user to press "Start Quiz"
 function loadGame() {
+    getHighscoresFromStorage();
     questionText.textContent = "Coding Quiz Challenge";
     answerText.textContent = "Try to answer the following code-related questions within the time limit.  Keep in mind that incorrect answers will penalize your score/time by ten seconds!";
     gameTimerTag.textContent = "Time: " + gameTimer;
@@ -115,12 +130,11 @@ function enterInitials() {
     questionText.textContent = "All Done!!!";
     answerText.style.display = "block";
     answerText.textContent = "Your final score is: " + score;
-    // labelTag.setAttribute("id", "label-tag");
     initialsLabel.style.display = "inline";
     initialsInput.style.display = "inline";
     initialsInputButton.style.display = "inline";
-    startButtonTag.style.display = "block";
-    showHighscoresButton.style.display = "block";
+    // startButtonTag.style.display = "block";
+    // showHighscoresButton.style.display = "block";
 }
 
 
@@ -239,6 +253,27 @@ function startQuiz() {
 
 
 
+function saveHighscore() {
+
+
+    var highscore = {
+        playerInitials: initialsInput.value,
+        playerScore: score
+    }
+
+    playerHighscores.push(highscore);
+    // ** Still need to sort the high scores    
+    localStorage.setItem("highscores", JSON.stringify(playerHighscores));
+
+}
+
+
+function showHighscores() {
+
+}
+
+
+
 // This is where the code starts running
 loadGame();
 
@@ -325,10 +360,16 @@ answer4Button.addEventListener("click", function() {
 
 
 showHighscoresButton.addEventListener("click", function() {
-    window.location.href="./highScores.html";
+ 
 });
 
 
+
 initialsInputButton.addEventListener("click", function() {
+    console.log("InitalsInput listener firing");
+    saveHighscore();
+
+    // remove enter initials stuff from screen
     
+    showHighscores();
 });
