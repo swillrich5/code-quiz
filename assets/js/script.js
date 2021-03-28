@@ -138,8 +138,6 @@ function enterInitials() {
     initialsLabel.style.display = "inline";
     initialsInput.style.display = "inline";
     initialsInputButton.style.display = "inline";
-    // startButtonTag.style.display = "block";
-    // showHighscoresButton.style.display = "block";
 
 }
 
@@ -147,7 +145,7 @@ function enterInitials() {
 // when the game is complete, go to game over screen to see your score and
 // enter your initials for the scoreboard.
 function gameOver() {
-    var displayGameOverTimer = 3;
+    var displayGameOverTimer = 2;
     gameOverFlag = true;
   
     gameTimer = 0;
@@ -266,7 +264,9 @@ function saveHighscore() {
         playerInitials: initialsInput.value,
         playerScore: score
     }
-
+    if (playerHighscores === null) {
+        playerHighscores = [];
+    }
     playerHighscores.push(highscore);
 
     // ** Still need to sort the high scores    
@@ -274,20 +274,6 @@ function saveHighscore() {
 
 }
 
-
-// function showHighscores() {
-//     questionText.textContent = "High Scores";
-//     answerText.style.display = "block";
-//     for (i = 0; i < playerHighscores.length; i++) {
-//         // answerText.innerHTML += "<p>" + (i+1) + ". " + playerHighscores[i].playerInitials +
-//         //     "\t\t\t" + playerHighscores[i].playerScore + "</p>";
-//         highScoresDiv.innerHTML += "<p>" + playerHighscores[i].playerInitials + "\t\t" + playerHighscores[i].playerScore + "</p>";
-//         // console.log("<table><tr>");
-//         // console.log("<td>" + playerHighscores[i].playerInitials + "</td>");
-//         // console.log("<td>" + playerHighscores[i].playerScore + "</td>");
-//         // console.log("</tr>");
-//     }
-// }
 
 
 function showHighscores() {
@@ -421,6 +407,7 @@ initialsInputButton.addEventListener("click", function() {
     answerText.textContent = "";
     initialsLabel.style.display = "none";
     initialsInput.style.display = "none";
+    initialsInput.textContent = "";
     initialsInputButton.style.display = "none";
 
     
