@@ -9,6 +9,7 @@ var answer4Button = document.querySelector("#answer4-button");
 var answerResult = document.querySelector("#answer-result");
 var gameTimerTag = document.querySelector("#game-timer");
 var gameOverTag = document.querySelector("#game-over-tag");
+var startButtonTag = document.querySelector("#start-button");
 
 
 var chosenQuestion;
@@ -80,10 +81,6 @@ function clearScreen() {
 function loadGame() {
     questionText.textContent = "Coding Quiz Challenge";
     answerText.textContent = "Try to answer the following code-related questions within the time limit.  Keep in mind that incorrect answers will penalize your score/time by ten seconds!";
-    var tag = document.createElement("button");
-    tag.textContent= "Start Quiz";
-    answersContainer.appendChild(tag);
-    tag.setAttribute("id", "start-button");
     gameTimerTag.textContent = "Time: " + gameTimer;
 
     // answerText.textContent = "";
@@ -112,10 +109,8 @@ function enterInitials() {
     answersContainer.appendChild(initialsTag);
     initialsTag.setAttribute("id", "initials-tag");
 
-    var newGameTag = document.createElement("button");
-    newGameTag.textContent= "New Game";
-    answersContainer.appendChild(newGameTag);
-    newGameTag.setAttribute("id", "new-game-button");
+    startButtonTag.style.display = "block";
+
     
     var showHighscoresTag = document.createElement("button");
     showHighscoresTag.textContent= "Show High Scores";
@@ -230,7 +225,7 @@ function startQuiz() {
     console.log("We're ready to start the Quiz!!!");
     // clear out the tags from the game introduction
     var startButtonTag = document.querySelector("#start-button");
-    startButtonTag.remove();
+    startButtonTag.style.display = "none";
     answerText.style.display = "none";
 
 
