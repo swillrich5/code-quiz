@@ -14,8 +14,10 @@ var initialsLabel = document.querySelector("#initials-label");
 var initialsInput = document.querySelector("#initials-input");
 var initialsInputButton = document.querySelector("#initials-input-button");
 var showHighscoresButton = document.querySelector("#show-highscores-button");
+var highScoresDiv = document.querySelector("#high-scores-div");
     
 var playerHighscores = [];
+var highscore;
 
 var chosenQuestion;
 var resultTimer = 1;
@@ -103,6 +105,9 @@ function getHighscoresFromStorage() {
     if (playerHighscores !== null) {
         playerHighscores = storedHighscores;
     }
+    else {
+        playerHighscores = [];
+    }
     
     console.log("Player High Scores", playerHighscores);
 
@@ -135,6 +140,7 @@ function enterInitials() {
     initialsInputButton.style.display = "inline";
     // startButtonTag.style.display = "block";
     // showHighscoresButton.style.display = "block";
+
 }
 
 
@@ -256,20 +262,59 @@ function startQuiz() {
 function saveHighscore() {
 
 
-    var highscore = {
+    highscore = {
         playerInitials: initialsInput.value,
         playerScore: score
     }
 
     playerHighscores.push(highscore);
+
     // ** Still need to sort the high scores    
     localStorage.setItem("highscores", JSON.stringify(playerHighscores));
 
 }
 
 
-function showHighscores() {
+// function showHighscores() {
+//     questionText.textContent = "High Scores";
+//     answerText.style.display = "block";
+//     for (i = 0; i < playerHighscores.length; i++) {
+//         // answerText.innerHTML += "<p>" + (i+1) + ". " + playerHighscores[i].playerInitials +
+//         //     "\t\t\t" + playerHighscores[i].playerScore + "</p>";
+//         highScoresDiv.innerHTML += "<p>" + playerHighscores[i].playerInitials + "\t\t" + playerHighscores[i].playerScore + "</p>";
+//         // console.log("<table><tr>");
+//         // console.log("<td>" + playerHighscores[i].playerInitials + "</td>");
+//         // console.log("<td>" + playerHighscores[i].playerScore + "</td>");
+//         // console.log("</tr>");
+//     }
+// }
 
+
+function showHighscores() {
+    questionText.textContent = "High Scores";
+    answerText.style.display = "block";
+
+    // build a table to display the high scores
+    var tbl = document.createElement("table");
+    var tblBody = document.createElement("tbody");
+    var row, cell1, cell2, cell1Text, cell2Text;
+    for (i = 0; i < playerHighscores.length; i++) {
+        row = document.createElement("tr");
+        cell1 = document.createElement("td");
+        cell1Text = document.createTextNode(playerHighscores[i].playerInitials);
+        cell2 = document.createElement("td");
+        cell2Text = document.createTextNode(playerHighscores[i].playerScore);
+        cell1.appendChild(cell1Text);
+        row.appendChild(cell1);
+        cell2.appendChild(cell2Text);
+        row.appendChild(cell2);
+        tblBody.appendChild(row);
+    }
+    tbl.appendChild(tblBody);
+    highScoresDiv.appendChild(tbl);
+    cell1.style.columnWidth = "200px";
+    cell2.style.columnWidth = "20px";
+    tbl.style.fontSize = "20px";
 }
 
 
@@ -360,6 +405,7 @@ answer4Button.addEventListener("click", function() {
 
 
 showHighscoresButton.addEventListener("click", function() {
+
  
 });
 
@@ -370,6 +416,13 @@ initialsInputButton.addEventListener("click", function() {
     saveHighscore();
 
     // remove enter initials stuff from screen
+    questionText.textContent = "";
+    answerText.style.display = "none";
+    answerText.textContent = "";
+    initialsLabel.style.display = "none";
+    initialsInput.style.display = "none";
+    initialsInputButton.style.display = "none";
+
     
     showHighscores();
 });
