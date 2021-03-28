@@ -10,7 +10,11 @@ var answerResult = document.querySelector("#answer-result");
 var gameTimerTag = document.querySelector("#game-timer");
 var gameOverTag = document.querySelector("#game-over-tag");
 var startButtonTag = document.querySelector("#start-button");
-
+var initialsLabel = document.querySelector("#initials-label");
+var initialsInput = document.querySelector("#initials-input");
+var initialsInputButton = document.querySelector("#initials-input-button");
+var showHighscoresButton = document.querySelector("#show-highscores-button");
+    
 
 var chosenQuestion;
 var resultTimer = 1;
@@ -60,7 +64,23 @@ var quizArray = [
         answer3: "3. for loops",
         answer4: "4. console.log",
         correctAnswer: "4. console.log"
-    }
+    },
+    {
+        question: "What Document method can be used to return the first element within the document that matches the specified selector, or group of selectors?",
+        answer1: "1. document.querySelector()",
+        answer2: "2. document.style()",
+        answer3: "3. console.log",
+        answer4: "4. document--",
+        correctAnswer: "1. document.querySelector()"
+    },
+    {
+        question: "What string method is used to select a character from within a string?",
+        answer1: "1. charAt()",
+        answer2: "2. substr()",
+        answer3: "3. length",
+        answer4: "4. slice()",
+        correctAnswer: "1. charAt()"
+    }    
 ];
 
 // clear out every tag on the screen except for those related to 
@@ -95,32 +115,12 @@ function enterInitials() {
     questionText.textContent = "All Done!!!";
     answerText.style.display = "block";
     answerText.textContent = "Your final score is: " + score;
-    var labelTag = document.createElement("label");
-    labelTag.style.fontSize = "20px";
-    labelTag.textContent= "Enter initials: ";
-    labelTag.style.marginTop = "20px";
-    answersContainer.appendChild(labelTag);
     // labelTag.setAttribute("id", "label-tag");
-    var initialsTag = document.createElement("input");
-    initialsTag.setAttribute.type = "text";
-    initialsTag.style.fontSize = "20px";
-    initialsTag.style.marginTop = "20px";
-    initialsTag.textContent= "";
-    answersContainer.appendChild(initialsTag);
-    initialsTag.setAttribute("id", "initials-tag");
-
+    initialsLabel.style.display = "inline";
+    initialsInput.style.display = "inline";
+    initialsInputButton.style.display = "inline";
     startButtonTag.style.display = "block";
-
-    
-    var showHighscoresTag = document.createElement("button");
-    showHighscoresTag.textContent= "Show High Scores";
-    answersContainer.appendChild(showHighscoresTag);
-    showHighscoresTag.setAttribute("id", "show-highscores-button");
-
-
-
- 
-
+    showHighscoresButton.style.display = "block";
 }
 
 
@@ -166,7 +166,9 @@ function displayAnswerResult(right) {
             clearInterval(timerInterval);
             resultTimer = 1;
             answerResult.textContent = "";
-            displayQuestions();
+            if (!gameOverFlag) {
+                displayQuestions();
+            }
         }
         
     }, 1000);
@@ -184,7 +186,6 @@ function startGameTimer() {
             if (!gameOverFlag) {
                 gameOver();
             }
-            gameTimer = 30;
         }
     }, 1000);
 }
@@ -215,7 +216,6 @@ function displayQuestions() {
         answer3Button.textContent = chosenQuestion.answer3;
         answer4Button.textContent = chosenQuestion.answer4;    
     }
-
 }
 
 
@@ -227,7 +227,10 @@ function startQuiz() {
     var startButtonTag = document.querySelector("#start-button");
     startButtonTag.style.display = "none";
     answerText.style.display = "none";
-
+    initialsLabel.style.display = "none";
+    initialsInput.style.display = "none";
+    showHighscoresButton.style.display = "none";
+    gameOverFlag = false;
 
     // select a question from the questionArray
     displayQuestions();
@@ -248,6 +251,10 @@ loadGame();
 // fires when the "Start Quiz" button is pressed by the user
 document.querySelector("#start-button").addEventListener("click", function() {
     console.log("Now we're cooking!");
+    if (gameOverFlag) {
+        location.reload();
+    }
+    gameTimer = 30;
     startGameTimer();
     startQuiz();  // start asking the questions
 });
@@ -314,4 +321,14 @@ answer4Button.addEventListener("click", function() {
         gameTimer = gameTimer - 10;  // lose 10 seconds for an incorrect answer
     }
     displayAnswerResult(correctAnswer);  // displays "Correct" or "Wrong" on screen
+});
+
+
+showHighscoresButton.addEventListener("click", function() {
+    window.location.href="./highScores.html";
+});
+
+
+initialsInputButton.addEventListener("click", function() {
+    
 });
