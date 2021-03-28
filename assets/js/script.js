@@ -264,10 +264,12 @@ function saveHighscore() {
         playerInitials: initialsInput.value,
         playerScore: score
     }
-    if (playerHighscores === null) {
-        playerHighscores = [];
+    if (playerHighscores == null) {
+        playerHighscores = [{ playerInitials: initialsInput.value,
+                              playerScore: score}];
+    } else {
+        playerHighscores.push(highscore);
     }
-    playerHighscores.push(highscore);
 
     // ** Still need to sort the high scores    
     localStorage.setItem("highscores", JSON.stringify(playerHighscores));
