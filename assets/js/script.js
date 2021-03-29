@@ -13,8 +13,9 @@ var startButtonTag = document.querySelector("#start-button");
 var initialsLabel = document.querySelector("#initials-label");
 var initialsInput = document.querySelector("#initials-input");
 var initialsInputButton = document.querySelector("#initials-input-button");
-var showHighscoresButton = document.querySelector("#show-highscores-button");
+var showHighscoresButton = document.querySelector("#view-highscores");
 var highScoresDiv = document.querySelector("#high-scores-div");
+var eraseHighscoresButton = document.querySelector("#erase-highscores-button");
     
 var playerHighscores = [];
 var highscore;
@@ -97,6 +98,9 @@ function clearScreen() {
     answer4Button.style.display = "none";
     gameOverTag.textContent = "";
 
+    // document.querySelector("table").remove();
+
+
 }
 
 function getHighscoresFromStorage() {
@@ -123,7 +127,7 @@ function loadGame() {
     answerText.textContent = "Try to answer the following code-related questions within the time limit.  Keep in mind that incorrect answers will penalize your score/time by ten seconds!";
     gameTimerTag.textContent = "Time: " + gameTimer;
 
-    // answerText.textContent = "";
+    eraseHighscoresButton.style.display = "none";
     answer1Button.style.display = "none";
     answer2Button.style.display = "none";
     answer3Button.style.display = "none";
@@ -242,12 +246,15 @@ function displayQuestions() {
 function startQuiz() {
     console.log("We're ready to start the Quiz!!!");
     // clear out the tags from the game introduction
+    clearScreen();
+    score = 0;
+    // document.querySelector("table").remove();
     var startButtonTag = document.querySelector("#start-button");
+    eraseHighscoresButton.style.display = "none";
     startButtonTag.style.display = "none";
     answerText.style.display = "none";
     initialsLabel.style.display = "none";
     initialsInput.style.display = "none";
-    showHighscoresButton.style.display = "none";
     gameOverFlag = false;
 
     // select a question from the questionArray
@@ -258,8 +265,6 @@ function startQuiz() {
 
 
 function saveHighscore() {
-
-
     highscore = {
         playerInitials: initialsInput.value,
         playerScore: score
@@ -280,29 +285,39 @@ function saveHighscore() {
 
 function showHighscores() {
     questionText.textContent = "High Scores";
-    answerText.style.display = "block";
+    answerText.style.display = "none";
 
     // build a table to display the high scores
     var tbl = document.createElement("table");
     var tblBody = document.createElement("tbody");
     var row, cell1, cell2, cell1Text, cell2Text;
-    for (i = 0; i < playerHighscores.length; i++) {
-        row = document.createElement("tr");
-        cell1 = document.createElement("td");
-        cell1Text = document.createTextNode(playerHighscores[i].playerInitials);
-        cell2 = document.createElement("td");
-        cell2Text = document.createTextNode(playerHighscores[i].playerScore);
-        cell1.appendChild(cell1Text);
-        row.appendChild(cell1);
-        cell2.appendChild(cell2Text);
-        row.appendChild(cell2);
-        tblBody.appendChild(row);
+    if (playerHighscores != null) {
+        for (i = 0; i < playerHighscores.length; i++) {
+            row = document.createElement("tr");
+            cell1 = document.createElement("td");
+            cell1Text = document.createTextNode(playerHighscores[i].playerInitials);
+            cell2 = document.createElement("td");
+            cell2Text = document.createTextNode(playerHighscores[i].playerScore);
+            cell1.appendChild(cell1Text);
+            row.appendChild(cell1);
+            cell2.appendChild(cell2Text);
+            row.appendChild(cell2);
+            tblBody.appendChild(row);
+        }
+        tbl.appendChild(tblBody);
+        highScoresDiv.appendChild(tbl);
+        cell1.style.columnWidth = "200px";
+        cell2.style.columnWidth = "20px";
+        tbl.style.fontSize = "20px";  
+        tbl.setAttribute("id", "highscore-table");
+    } else if (document.querySelectorAll("table")) {
+        document.querySelectorAll("#highscore-table").remove;
     }
-    tbl.appendChild(tblBody);
-    highScoresDiv.appendChild(tbl);
-    cell1.style.columnWidth = "200px";
-    cell2.style.columnWidth = "20px";
-    tbl.style.fontSize = "20px";
+    // add "Erase High Scores" button
+    eraseHighscoresButton.style.display = "block";
+
+    // make the "Start Quiz" button visible so user can play again
+    startButtonTag.style.display = "block";
 }
 
 
@@ -334,7 +349,7 @@ answer1Button.addEventListener("click", function() {
     if  (chosenQuestion.correctAnswer === chosenQuestion.answer1) {
         console.log("Correct");
         correctAnswer = true;
-        score = score + 20;
+        score = score + 10;
     } else {
         console.log("Wrong Answer");
         correctAnswer = false;
@@ -393,7 +408,7 @@ answer4Button.addEventListener("click", function() {
 
 
 showHighscoresButton.addEventListener("click", function() {
-
+    showHighscores();
  
 });
 
@@ -413,5 +428,13 @@ initialsInputButton.addEventListener("click", function() {
     initialsInputButton.style.display = "none";
 
     
+    showHighscores();
+});
+
+eraseHighscoresButton.addEventListener("click", function() {
+    console.log("Erase High Scores Event Listener working");
+    window.localStorage.clear();
+    playerHighscores = null;
+    document.querySelector("#highscore-table").remove();
     showHighscores();
 });

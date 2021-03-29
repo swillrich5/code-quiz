@@ -64,6 +64,11 @@ button {
     border-radius: 5px;
 }
 
+table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .answer-button {
     width: 250px;
     text-align: left;
