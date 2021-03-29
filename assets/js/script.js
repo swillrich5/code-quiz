@@ -1,30 +1,44 @@
-
+    // heading where the questions will be displayed
 var questionText = document.querySelector("#question-text");
-var answersContainer = document.querySelector("#answers-container");
+    // paragraph tag where answers will be displayed
 var answerText = document.querySelector("#answer-text");
+    // button to click for selecting answer #1
 var answer1Button = document.querySelector("#answer1-button");
+    // button to click for selecting answer #2
 var answer2Button = document.querySelector("#answer2-button");
+    // button to click for selecting answer #3
 var answer3Button = document.querySelector("#answer3-button");
+    // button to click for selecting answer #4
 var answer4Button = document.querySelector("#answer4-button");
+    // p tag where "Correct" or "Wrong" is displayed after an answer is chosen
 var answerResult = document.querySelector("#answer-result");
+    // p tag where the game timer is displayed (upper right corner)
 var gameTimerTag = document.querySelector("#game-timer");
+    // h3 tag where "Game Over" is displayed when either the timer expires or the users has gone through all of the questions
 var gameOverTag = document.querySelector("#game-over-tag");
+    // button tag, when clicked, starts the game going.
 var startButtonTag = document.querySelector("#start-button");
+    // label tag for input field allowing user to enter initials for the High Score list
 var initialsLabel = document.querySelector("#initials-label");
+    // input field where the user can enter their initials for the high score list
 var initialsInput = document.querySelector("#initials-input");
+    // button that submits the user's initials for the high score list
 var initialsInputButton = document.querySelector("#initials-input-button");
+    // link in upper left corner that takes a user to the high scores list
 var showHighscoresButton = document.querySelector("#view-highscores");
+    // this div is used when the table holding the high scores is built.
 var highScoresDiv = document.querySelector("#high-scores-div");
+    // button to allow the user to erase all of the high scores from the screen and local storage
 var eraseHighscoresButton = document.querySelector("#erase-highscores-button");
-    
-var playerHighscores = [];
-var highscore;
 
-var chosenQuestion;
-var resultTimer = 1;
-var gameTimer = 30;
-var score = 0;
-var gameOverFlag = false;
+var playerHighscores = [];  // array of key values (player initials and scores)
+var highscore;              // users initials / score object to be inserted in player high scores array
+
+var chosenQuestion;         // question that's pulled out of the question array to be presented to the user
+var resultTimer = 1;        // used in showing "Correct" or "Wrong" a user answers a question
+var gameTimer = 30;         // game countdown timer
+var score = 0;              // user's score
+var gameOverFlag = false;   // flag used to stop the timer if player answers all of the questions before time's up
 
 // this is the array of questions/answer objects to be asked of the user
 var quizArray = [
@@ -87,22 +101,20 @@ var quizArray = [
     }    
 ];
 
+
 // clear out every tag on the screen except for those related to 
 // "View Highscore" and the timer.
 function clearScreen() {
-
     questionText.textContent = "";
     answer1Button.style.display = "none";
     answer2Button.style.display = "none";
     answer3Button.style.display = "none";
     answer4Button.style.display = "none";
     gameOverTag.textContent = "";
-
-    // document.querySelector("table").remove();
-
-
 }
 
+
+// pull any high scores from local storage
 function getHighscoresFromStorage() {
     var storedHighscores = JSON.parse(localStorage.getItem("highscores"));
 
@@ -112,9 +124,6 @@ function getHighscoresFromStorage() {
     else {
         playerHighscores = [];
     }
-    
-    console.log("Player High Scores", playerHighscores);
-
 }
 
 
@@ -134,20 +143,20 @@ function loadGame() {
     answer4Button.style.display = "none";
 }
 
-function enterInitials() {
 
+// displays the screen for the user to enter their initials at the end of the game
+function enterInitials() {
     questionText.textContent = "All Done!!!";
     answerText.style.display = "block";
     answerText.textContent = "Your final score is: " + score;
     initialsLabel.style.display = "inline";
     initialsInput.style.display = "inline";
     initialsInputButton.style.display = "inline";
-
 }
 
 
-// when the game is complete, go to game over screen to see your score and
-// enter your initials for the scoreboard.
+// when the game is complete, "Game Over" is displayed on the screen
+// for a few seconds.  Then the user is navigated to enter their initials
 function gameOver() {
     var displayGameOverTimer = 2;
     gameOverFlag = true;
@@ -172,7 +181,7 @@ function gameOver() {
 
 
 // displays "Correct!" or "Wrong!" below the question for a short 
-// period of time
+// period of time (one second)
 function displayAnswerResult(right) {
 
     if (right) {
@@ -192,11 +201,12 @@ function displayAnswerResult(right) {
                 displayQuestions();
             }
         }
-        
     }, 1000);
 }
 
 
+// sets up the game timer, starts it going, and updates the timer 
+// display every second
 function startGameTimer() {
     var gameTimerInterval = setInterval(function() {
         gameTimerTag.textContent = "Time: " + gameTimer;
@@ -213,21 +223,19 @@ function startGameTimer() {
 }
 
 
-// displays a question
+// displays a question chosen at random from the array of questions/answers
 // the code then waits for the user to select an answer by pressing
 // one of the answer choice buttons, which fires off one of the 
-// event listeners
+// answer event listeners
 function displayQuestions() {
     if (quizArray.length === 0) {
-        console.log("⚡️  Game Over!  ⚡️");
         gameOver();
     } else {
-        console.log(quizArray);
         var questionIndex = Math.floor(Math.random() * quizArray.length);
+
+        showHighscoresButton.style.visibility = "hidden";
         chosenQuestion = quizArray[questionIndex];
         quizArray.splice(questionIndex, 1);
-        console.log(chosenQuestion);
-        console.log(quizArray);
         questionText.textContent = chosenQuestion.question;
         answer1Button.style.display = "block";
         answer2Button.style.display = "block";
@@ -242,9 +250,9 @@ function displayQuestions() {
 
 
 
-
+// called when the "Start Quiz" button is clicked (event listenter)
+// clears the opening screen and displays the first question
 function startQuiz() {
-    console.log("We're ready to start the Quiz!!!");
     // clear out the tags from the game introduction
     clearScreen();
     score = 0;
@@ -259,16 +267,18 @@ function startQuiz() {
 
     // select a question from the questionArray
     displayQuestions();
-
 }
 
 
-
+// Adds the user's score to the high scores array and then writes
+// the updated list to local storage
 function saveHighscore() {
     highscore = {
         playerInitials: initialsInput.value,
         playerScore: score
     }
+
+    // adding to the empty array required initialization
     if (playerHighscores == null) {
         playerHighscores = [{ playerInitials: initialsInput.value,
                               playerScore: score}];
@@ -282,12 +292,12 @@ function saveHighscore() {
 }
 
 
-
+// clears the screen and displays the high scores screen
 function showHighscores() {
+    // set up the High Scores screen
     questionText.textContent = "High Scores";
     answerText.style.display = "none";
     showHighscoresButton.style.visibility = "hidden";
-
 
     // build a table to display the high scores
     var tbl = document.createElement("table");
@@ -303,7 +313,9 @@ function showHighscores() {
             cell1.appendChild(cell1Text);
             row.appendChild(cell1);
             cell2.appendChild(cell2Text);
+            cell2.style.textAlign = "right";
             row.appendChild(cell2);
+            tbl.style.marginBottom = "20px";
             tblBody.appendChild(row);
         }
         tbl.appendChild(tblBody);
@@ -324,18 +336,18 @@ function showHighscores() {
 
 
 
-// This is where the code starts running
+// --------->> This is where the code starts running <<---------
 loadGame();
+// --------->> This is where the code starts running <<---------
 
 
-
+/* --------------------------------------------------------- */
 /* ----------------- Event Listeners Below ----------------- */
+/* --------------------------------------------------------- */
 
 
-
-// fires when the "Start Quiz" button is pressed by the user
+// fires when the "Start Quiz" button is clicked by the user
 document.querySelector("#start-button").addEventListener("click", function() {
-    console.log("Now we're cooking!");
     if (gameOverFlag) {
         location.reload();
     }
@@ -345,15 +357,17 @@ document.querySelector("#start-button").addEventListener("click", function() {
 });
 
 
-//
+// fires when the user clicks on the 1st answer in the list
+// compares the answer chosen by the user to the correct answer
+// and calls displayAnswerResult() to show "Correct" or "Wrong"
+// decrements the clock by 10 seconds if the answer is wrong
+// adds 10 points to the score if the answer is right
 answer1Button.addEventListener("click", function() {
     var correctAnswer = false;
     if  (chosenQuestion.correctAnswer === chosenQuestion.answer1) {
-        console.log("Correct");
         correctAnswer = true;
         score = score + 10;
     } else {
-        console.log("Wrong Answer");
         correctAnswer = false;
         gameTimer = gameTimer - 10;  // lose 10 seconds for an incorrect answer
     }
@@ -361,15 +375,17 @@ answer1Button.addEventListener("click", function() {
 });
 
 
-//
+// fires when the user clicks on the 2nd answer in the list
+// compares the answer chosen by the user to the correct answer
+// and calls displayAnswerResult() to show "Correct" or "Wrong"
+// decrements the clock by 10 seconds if the answer is wrong
+// adds 10 points to the score if the answer is right
 answer2Button.addEventListener("click", function() {
     var correctAnswer = false;
     if  (chosenQuestion.correctAnswer === chosenQuestion.answer2) {
-        console.log("Correct");
         correctAnswer = true;
-        score = score + 20;
+        score = score + 10;
     } else {
-        console.log("Wrong Answer");
         correctAnswer = false;
         gameTimer = gameTimer - 10;  // lose 10 seconds for an incorrect answer
     }
@@ -377,15 +393,17 @@ answer2Button.addEventListener("click", function() {
 });
 
 
-//
+/// fires when the user clicks on the 3rd answer in the list
+// compares the answer chosen by the user to the correct answer
+// and calls displayAnswerResult() to show "Correct" or "Wrong"
+// decrements the clock by 10 seconds if the answer is wrong
+// adds 10 points to the score if the answer is right
 answer3Button.addEventListener("click", function() {
     var correctAnswer = false;
     if  (chosenQuestion.correctAnswer === chosenQuestion.answer3) {
-        console.log("Correct");
         correctAnswer = true;
-        score = score + 20;
+        score = score + 10;
     } else {
-        console.log("Wrong Answer");
         correctAnswer = false;
         gameTimer = gameTimer - 10;  // lose 10 seconds for an incorrect answer
     }
@@ -393,15 +411,17 @@ answer3Button.addEventListener("click", function() {
 });
 
 
-//
+// fires when the user clicks on the 4th answer in the list
+// compares the answer chosen by the user to the correct answer
+// and calls displayAnswerResult() to show "Correct" or "Wrong"
+// decrements the clock by 10 seconds if the answer is wrong
+// adds 10 points to the score if the answer is right
 answer4Button.addEventListener("click", function() {
     var correctAnswer = false;
     if  (chosenQuestion.correctAnswer === chosenQuestion.answer4) {
-        console.log("Correct");
         correctAnswer = true;
-        score = score + 20;
+        score = score + 10;
     } else {
-        console.log("Wrong Answer");
         correctAnswer = false;
         gameTimer = gameTimer - 10;  // lose 10 seconds for an incorrect answer
     }
@@ -409,15 +429,18 @@ answer4Button.addEventListener("click", function() {
 });
 
 
+// fires when the user clicks on the "View Highscores" link
+// at the top of the page.  displays the high scores list
 showHighscoresButton.addEventListener("click", function() {
-    showHighscores();
- 
+    showHighscores(); 
 });
 
 
-
+// fires when the user clicks the submit button to store the user's 
+// initials on the "Highscores page". 
+// calls saveHighscore to save the user's score to local storage
+// call showHighscores() to display the list of high scores
 initialsInputButton.addEventListener("click", function() {
-    console.log("InitalsInput listener firing");
     saveHighscore();
 
     // remove enter initials stuff from screen
@@ -428,15 +451,17 @@ initialsInputButton.addEventListener("click", function() {
     initialsInput.style.display = "none";
     initialsInput.textContent = "";
     initialsInputButton.style.display = "none";
-
     
     showHighscores();
 });
 
+
+// fires when the user clicks the "Erase Highscores" button
+// clears out local storage and the high scores array (playerHighscores)
 eraseHighscoresButton.addEventListener("click", function() {
-    console.log("Erase High Scores Event Listener working");
     window.localStorage.clear();
     playerHighscores = null;
     document.querySelector("#highscore-table").remove();
     showHighscores();
 });
+
