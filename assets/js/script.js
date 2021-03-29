@@ -256,7 +256,7 @@ function startQuiz() {
     // clear out the tags from the game introduction
     clearScreen();
     score = 0;
-    // document.querySelector("table").remove();
+    document.querySelector("table").remove();
     var startButtonTag = document.querySelector("#start-button");
     eraseHighscoresButton.style.display = "none";
     startButtonTag.style.display = "none";
@@ -325,7 +325,8 @@ function showHighscores() {
         tbl.style.fontSize = "20px";  
         tbl.setAttribute("id", "highscore-table");
     } else if (document.querySelectorAll("table")) {
-        document.querySelectorAll("#highscore-table").remove;
+        document.querySelectorAll("#highscore-table").remove();
+
     }
     // add "Erase High Scores" button
     eraseHighscoresButton.style.display = "block";
