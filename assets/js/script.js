@@ -286,6 +286,8 @@ function saveHighscore() {
 function showHighscores() {
     questionText.textContent = "High Scores";
     answerText.style.display = "none";
+    showHighscoresButton.style.visibility = "hidden";
+
 
     // build a table to display the high scores
     var tbl = document.createElement("table");
