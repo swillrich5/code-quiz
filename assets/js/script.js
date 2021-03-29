@@ -256,7 +256,9 @@ function startQuiz() {
     // clear out the tags from the game introduction
     clearScreen();
     score = 0;
-    document.querySelector("table").remove();
+    // if (document.querySelector("table").remove()) {
+    //     document.querySelector("table").remove();
+    // }
     var startButtonTag = document.querySelector("#start-button");
     eraseHighscoresButton.style.display = "none";
     startButtonTag.style.display = "none";
