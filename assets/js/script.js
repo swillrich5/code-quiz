@@ -350,6 +350,7 @@ loadGame();
 // fires when the "Start Quiz" button is clicked by the user
 document.querySelector("#start-button").addEventListener("click", function() {
     if (gameOverFlag) {
+        // have to reload the game to initialize the questions, etc.
         location.reload();
     }
 
