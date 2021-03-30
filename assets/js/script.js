@@ -256,9 +256,7 @@ function startQuiz() {
     // clear out the tags from the game introduction
     clearScreen();
     score = 0;
-    // if (document.querySelector("table").remove()) {
-    //     document.querySelector("table").remove();
-    // }
+
     var startButtonTag = document.querySelector("#start-button");
     eraseHighscoresButton.style.display = "none";
     startButtonTag.style.display = "none";
@@ -288,7 +286,6 @@ function saveHighscore() {
         playerHighscores.push(highscore);
     }
 
-    // ** Still need to sort the high scores    
     localStorage.setItem("highscores", JSON.stringify(playerHighscores));
 
 }
@@ -297,6 +294,7 @@ function saveHighscore() {
 // clears the screen and displays the high scores screen
 function showHighscores() {
     // set up the High Scores screen
+    highScoresDiv.style.display = "block";
     questionText.textContent = "High Scores";
     answerText.style.display = "none";
     showHighscoresButton.style.visibility = "hidden";
@@ -326,10 +324,10 @@ function showHighscores() {
         cell2.style.columnWidth = "20px";
         tbl.style.fontSize = "20px";  
         tbl.setAttribute("id", "highscore-table");
-    } else if (document.querySelectorAll("table")) {
-        document.querySelectorAll("#highscore-table").remove();
-
+    } else if (document.querySelector("#high-scores-div").innerHTML != null) {
+        document.querySelector("#high-scores-div").innerHTML = "";
     }
+    
     // add "Erase High Scores" button
     eraseHighscoresButton.style.display = "block";
 
@@ -353,6 +351,10 @@ loadGame();
 document.querySelector("#start-button").addEventListener("click", function() {
     if (gameOverFlag) {
         location.reload();
+    }
+
+    if (document.querySelector("#high-scores-div").innerHTML != null) {
+        document.querySelector("#high-scores-div").innerHTML = "";
     }
     gameTimer = 30;
     startGameTimer();
@@ -464,7 +466,9 @@ initialsInputButton.addEventListener("click", function() {
 eraseHighscoresButton.addEventListener("click", function() {
     window.localStorage.clear();
     playerHighscores = null;
-    document.querySelector("#highscore-table").remove();
+    if (document.querySelector("#high-scores-div").innerHTML != null) {
+        document.querySelector("#high-scores-div").innerHTML = "";
+    }
     showHighscores();
 });
 
